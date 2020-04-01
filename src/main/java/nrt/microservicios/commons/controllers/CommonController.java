@@ -24,6 +24,11 @@ public class CommonController<E, S extends CommonService<E>> {
 	@Autowired
 	protected S service;
 	
+	@GetMapping
+	public ResponseEntity<?> listar() {
+		return ResponseEntity.ok().body(service.findAll());
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> view(@PathVariable Long id) {
 		Optional<E> o = service.findById(id);
