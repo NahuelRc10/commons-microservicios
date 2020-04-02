@@ -8,7 +8,7 @@ public interface CommonService<E> {
 	
 	public Optional<E> findById(Long id);
 	
-	public E save(E entity);
+	public E save(E entity) throws Exception;
 	
 	public void deleteById(Long id);
 }

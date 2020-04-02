@@ -21,7 +21,7 @@ public class CommonServiceImpl<E, R extends CrudRepository<E, Long>> implements 
 	}
 
 	@Override
-	public E save(E entity) {
+	public E save(E entity) throws Exception {
 		return repository.save(entity);
 	}
 
