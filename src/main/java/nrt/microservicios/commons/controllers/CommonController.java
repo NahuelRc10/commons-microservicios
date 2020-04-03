@@ -39,7 +39,7 @@ public class CommonController<E, S extends CommonService<E>> {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> add(@Valid @RequestBody E entity, BindingResult result) {
+	public ResponseEntity<?> add(@Valid @RequestBody E entity, BindingResult result) throws Exception {
 		if (result.hasErrors()) {
 			return this.validar(result);
 		}
