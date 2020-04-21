@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -29,6 +30,11 @@ public class CommonController<E, S extends CommonService<E>> {
 		return ResponseEntity.ok().body(service.findAll());
 	}
 	
+	@GetMapping("/paginator")
+	public ResponseEntity<?> listar(Pageable pageable) {
+		return ResponseEntity.ok().body(service.findAll(pageable));
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> view(@PathVariable Long id) {
 		Optional<E> o = service.findById(id);
@@ -39,11 +45,16 @@ public class CommonController<E, S extends CommonService<E>> {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> add(@Valid @RequestBody E entity, BindingResult result) throws Exception {
+	public ResponseEntity<?> add(@Valid @RequestBody E entity, BindingResult result) {
 		if (result.hasErrors()) {
 			return this.validar(result);
 		}
-		E entityDb = service.save(entity);
+		E entityDb = null;
+		try {
+			entityDb = service.save(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(entityDb);
 	}
 	
