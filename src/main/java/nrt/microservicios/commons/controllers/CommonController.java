@@ -46,6 +46,8 @@ public class CommonController<E, S extends CommonService<E>> {
 	
 	@PostMapping
 	public ResponseEntity<?> add(@Valid @RequestBody E entity, BindingResult result) {
+		Map<String, Object> response = new HashMap<>();
+
 		if (result.hasErrors()) {
 			return this.validar(result);
 		}
@@ -53,7 +55,9 @@ public class CommonController<E, S extends CommonService<E>> {
 		try {
 			entityDb = service.save(entity);
 		} catch (Exception e) {
-			e.printStackTrace();
+			response.put("mensaje", "Se produjo un error en el servidor");
+			response.put("error", e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(entityDb);
 	}
